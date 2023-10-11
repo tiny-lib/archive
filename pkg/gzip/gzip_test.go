@@ -2,13 +2,13 @@ package gzip
 
 import (
 	"compress/gzip"
+	"github.com/tiny-lib/archive/pkg/archiveFile"
 	"io"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
 
-	"github.com/goreleaser/goreleaser/pkg/config"
 	"github.com/stretchr/testify/require"
 )
 
@@ -20,11 +20,11 @@ func TestGzFile(t *testing.T) {
 	archive := New(f)
 	defer archive.Close() // nolint: errcheck
 
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Destination: "sub1/sub2/subfoo.txt",
 		Source:      "../testdata/sub1/sub2/subfoo.txt",
 	}))
-	require.EqualError(t, archive.Add(config.File{
+	require.EqualError(t, archive.Add(archiveFile.Entry{
 		Destination: "foo.txt",
 		Source:      "../testdata/foo.txt",
 	}), "gzip: failed to add foo.txt, only one file can be archived in gz format")
@@ -59,10 +59,10 @@ func TestGzFileCustomMtime(t *testing.T) {
 
 	now := time.Now().Truncate(time.Second)
 
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Destination: "sub1/sub2/subfoo.txt",
 		Source:      "../testdata/sub1/sub2/subfoo.txt",
-		Info: config.FileInfo{
+		Info: archiveFile.FileInfo{
 			ParsedMTime: now,
 		},
 	}))

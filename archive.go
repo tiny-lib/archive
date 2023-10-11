@@ -8,7 +8,7 @@ import (
 	"github.com/tiny-lib/archive/pkg/tar"
 	"github.com/tiny-lib/archive/pkg/targz"
 	"github.com/tiny-lib/archive/pkg/tarxz"
-	"github.com/tiny-lib/archive/zip"
+	"github.com/tiny-lib/archive/pkg/zip"
 	"io"
 	"os"
 )

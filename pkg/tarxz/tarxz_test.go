@@ -2,6 +2,7 @@ package tarxz
 
 import (
 	"archive/tar"
+	"github.com/tiny-lib/archive/pkg/archiveFile"
 	"io"
 	"io/fs"
 	"os"
@@ -9,7 +10,6 @@ import (
 	"testing"
 	"time"
 
-	"github.com/goreleaser/goreleaser/pkg/config"
 	"github.com/stretchr/testify/require"
 	"github.com/ulikunitz/xz"
 )
@@ -22,45 +22,45 @@ func TestTarXzFile(t *testing.T) {
 	archive := New(f)
 	defer archive.Close() // nolint: errcheck
 
-	require.Error(t, archive.Add(config.File{
+	require.Error(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/nope.txt",
 		Destination: "nope.txt",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/foo.txt",
 		Destination: "foo.txt",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/sub1",
 		Destination: "sub1",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/sub1/bar.txt",
 		Destination: "sub1/bar.txt",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/sub1/executable",
 		Destination: "sub1/executable",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/sub1/sub2",
 		Destination: "sub1/sub2",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/sub1/sub2/subfoo.txt",
 		Destination: "sub1/sub2/subfoo.txt",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/regular.txt",
 		Destination: "regular.txt",
 	}))
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/link.txt",
 		Destination: "link.txt",
 	}))
 
 	require.NoError(t, archive.Close())
-	require.Error(t, archive.Add(config.File{
+	require.Error(t, archive.Add(archiveFile.Entry{
 		Source:      "tar.go",
 		Destination: "tar.go",
 	}))
@@ -114,10 +114,10 @@ func TestTarXzFileInfo(t *testing.T) {
 	archive := New(f)
 	defer archive.Close() // nolint: errcheck
 
-	require.NoError(t, archive.Add(config.File{
+	require.NoError(t, archive.Add(archiveFile.Entry{
 		Source:      "../testdata/foo.txt",
 		Destination: "nope.txt",
-		Info: config.FileInfo{
+		Info: archiveFile.FileInfo{
 			Mode:        0o755,
 			Owner:       "carlos",
 			Group:       "root",
